@@ -1,6 +1,6 @@
 # chl_glider
 
-# About the project
+## About the project
 
 Glider chlorophyll data varies from deployment to deployment causing deployments to be difficult to use for analyses that require times spanning more than one mission. We have the aim to provide an adjusted chlorophyll product that will use a long-timeseries record of satellite chlorophyll to provide a reference by which our data can be adjusted. We will test using the long-timeseries ESA CCI chlorophyll product as a reference for merging our in-situ data. 
 
