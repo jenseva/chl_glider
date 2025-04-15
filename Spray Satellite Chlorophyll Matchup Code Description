@@ -1,0 +1,13 @@
+Spray to Satellite Chlorophyll Matchups
+Jennifer Patterson Sevadjian Feb 2025
+
+Summary
+Generate satellite chlorophyl matchups to spray glider data in the CUGN. Open each spray mission mat file. For each glider profile get the closest corresponding satellite chlorophyll. The matchup is made via ERDDAP, with requests for data determined by the time and location of the glider and the thresholds for a matchup. The output is saved as a csv file for further analysis.
+
+Satellite Chl data product information: 
+OCCCI 4km Weekly. https://climate.esa.int/en/projects/ocean-colour/data/#citing-ocean-colour-cci-information-and-data-products
+This dataset is designed for climate use this dataset merges multiple satellite deployments into one continuous data set from 1997 to present. This product is an international effort and is designed to meet user needs for stable ocean color information over time. It is on its sixth version, and is now updated about every 6-months with the latest/best data. Data are openly available over opendap via THREDDS. The CCI data server did not handle the batch requests for matchups very well. So I downloaded all the data for the CUGN region and posted it to the Spray ERDDAP. 
+Note that there are other resolutions (both spatial and temporal) for this product. 4km, weekly was a best first choice as it aligns with the scales that we think we need for calibration. Other products could be analyzed to see if they yield better calibrations but would be more involved and require processing of the satellite data by someone with satellite data expertise.
+
+Runtime Details:
+Python script (paella_spray_cci_matchup_batch2.py) runs on paella in conda env py39. Paella has local copies of the mat files used for the matchup. Requires connection to sushi to lookup project metadata from repo. Connects to spraydataweb ERDDAP for satellite data.
