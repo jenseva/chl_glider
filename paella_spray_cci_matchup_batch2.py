@@ -82,16 +82,6 @@ for in_fn in os.listdir(mat_dir):
     else:
         continue
 
-    # This worked when list was length one, when longer was not workinig as expected
-    #for mission in list_to_process:
-    #    if mission not in f:
-         #   logger.info('setting skip')
-    #        skip = 1
-    #        break
-    #if skip ==1: 
-        #logger.info('Set to skip. Skipping.')
-    #    continue
-
     # Log File
     log_fn = './log/batch_2b/'+ mission_name +'.log'
 
@@ -115,10 +105,6 @@ for in_fn in os.listdir(mat_dir):
     logger.info('File ' +str(mat_count)+' of ' + str(mat_total))
     logger.info(f)
     logger.info(mission_name)
-
-    # For debugging log file generation. Once confirmed fixed, can remove.
-    #if handler_removed == 1:
-    #    logger.info('previous log file handler has been removed.')
 
     # Confirm it is a file
     if os.path.isfile(f):
@@ -169,8 +155,7 @@ for in_fn in os.listdir(mat_dir):
     except:
         logger.error('Issue loading bindata. Skipping')
         continue
-    #print(sp_data)
-    #print(sp_data['time'])    
+   
     try:
         g_datetime = datetime.datetime.utcfromtimestamp(np.nanmin(sp_data['time']))
         sp_time_str_start = g_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -220,24 +205,6 @@ for in_fn in os.listdir(mat_dir):
     'sp_lon', 
     #'sp_depth',
      'sp_fl']
-
-    # Check out the cci metadata. This was slow on the pml server. 
-    #cci_url = 'https://coastwatch.pfeg.noaa.gov/erddap/griddap/pmlEsaCCI60OceanColorDaily'
-    #ds = xr.open_dataset(cci_url)
-    #print('Satellite Data:')
-    #print('  Time Range: ', ds.attrs['time_coverage_start'], 
-    #      ds.attrs['time_coverage_end'])
-    #print('  Latitude Range: ', ds.attrs['geospatial_lat_min'], 
-    #      ds.attrs['geospatial_lat_max'])
-    #print('  Longitude Range: ', ds.attrs['geospatial_lon_min'], 
-    #      ds.attrs['geospatial_lon_max'])
-    #print(' ')
-    #print('Glider Data:')
-    #print('  Time Range: ', sp_data['time'].min(), sp_data['time'].max())
-    #print('  Latitude Range: ', 
-    #      round(sp_data['lat'].min(), 2), round(sp_data['lat'].max(), 2))
-    #print('  Longitude Range: ', 
-    #     round(sp_data['lon'].min(), 2), round(sp_data['lon'].max(), 2))
 
     # create variables for the unchanging parts of the ERDDAP data-request URL.   
     #base_url = 'https://coastwatch.pfeg.noaa.gov/erddap/griddap/' # too slow
@@ -297,18 +264,14 @@ for in_fn in os.listdir(mat_dir):
     # FOR EACH PROFILE/DIVE 
     # PPPPPPPPPPPPPPPPPPPPPPPPP
     for i in range(0, len(sp_data['time'])):
-        #logger.info(df)
         new_sat = pd.DataFrame(columns=sat_cols)
 
         logger.info(mission_name +', Profile ' + str(i+1) + ' of ' + str(len(sp_data['time'])))
         
         # Use glider profile information to form the satellite data request
         # With this approach the same satellite data will be found for many of the data points
-        #sp_time = sp_data['time'][i]
-        #print(sp_time)
         
         # Glider point datetime
-        #g_datetime = datetime.datetime.strptime(sp_data['time'][i], "%Y-%m-%dT%H:%M:%SZ")
         try:
             g_datetime = datetime.datetime.utcfromtimestamp(sp_data['time'][i])
         except:
@@ -360,7 +323,7 @@ for in_fn in os.listdir(mat_dir):
         except Exception:
             logger.info('Request Error. Continuing.')
             continue
-        #logger.info(new_sat)
+
         # Assign column names to response
         new_sat.columns = sat_cols[:len(sat_cols)-1]
         #logger.info(new_sat)
@@ -392,7 +355,6 @@ for in_fn in os.listdir(mat_dir):
             # First, filter out matches without chl values, false returns
             # Reasons for no satellite chl include land and clouds
             new_sat = new_sat.loc[new_sat['cci_chla'].notnull()]
-            #logger.info(new_sat)
             new_sat = new_sat.reset_index(drop=True)
             
             #logger.info(len(new_sat))
